@@ -23,7 +23,7 @@ spec:
     fiscalYearStartMonth: 0
     gnetId: 13978
     graphTooltip: 0
-    iteration: 1.649184835815e+12
+    iteration: 1.649184852475e+12
     links: []
     liveNow: false
     panels:
@@ -774,7 +774,6 @@ spec:
         - instance
         - metrics
         - managed
-        - linux
     templating:
         list:
             - current:
