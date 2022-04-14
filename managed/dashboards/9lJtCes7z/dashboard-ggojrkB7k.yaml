@@ -23,7 +23,7 @@ spec:
     fiscalYearStartMonth: 0
     gnetId: 13978
     graphTooltip: 0
-    iteration: 1.649184852475e+12
+    iteration: 1.649959042008e+12
     links: []
     liveNow: false
     panels:
@@ -54,11 +54,10 @@ spec:
                     spanNulls: true
                     stacking:
                         group: A
-                        mode: normal
+                        mode: none
                     thresholdsStyle:
                         mode: "off"
                 mappings: []
-                max: 1
                 min: 0
                 thresholds:
                     mode: absolute
@@ -68,7 +67,22 @@ spec:
                         - color: red
                           value: 80
                 unit: percentunit
-            overrides: []
+            overrides:
+                - __systemRef: hideSeriesFrom
+                  matcher:
+                    id: byNames
+                    options:
+                        mode: exclude
+                        names:
+                            - Value
+                        prefix: 'All except:'
+                        readOnly: true
+                  properties:
+                    - id: custom.hideFrom
+                      value:
+                        legend: false
+                        tooltip: false
+                        viz: true
           gridPos:
             h: 7
             w: 12
@@ -78,8 +92,9 @@ spec:
           links: []
           options:
             legend:
-                calcs: []
-                displayMode: list
+                calcs:
+                    - lastNotNull
+                displayMode: hidden
                 placement: bottom
             tooltip:
                 mode: single
@@ -90,16 +105,12 @@ spec:
                 type: prometheus
                 uid: grafanacloud-prom
               exemplar: true
-              expr: |
-                (
-                  (1 - rate(host_cpu_seconds_total{job="integrations/linux_host", mode="idle", host="$instance"}[$__interval]))
-                / ignoring(cpu) group_left
-                  count without (cpu)( host_cpu_seconds_total{job="integrations/linux_host", mode="idle", host="$instance"})
-                )
+              expr: 1 - sum (rate(host_cpu_seconds_total{mode='idle',host="$instance"}[5m]))  /  count(count by (cpu) (host_cpu_seconds_total{mode='idle', host="$instance"}))
               format: time_series
+              hide: false
               interval: 1m
               intervalFactor: 5
-              legendFormat: '{{cpu}}'
+              legendFormat: User + System + Nice
               refId: A
           title: CPU Usage
           type: timeseries
@@ -352,7 +363,7 @@ spec:
                 values: false
             showThresholdLabels: false
             showThresholdMarkers: true
-          pluginVersion: 8.4.5-56740
+          pluginVersion: 8.4.6
           targets:
             - datasource:
                 type: prometheus
