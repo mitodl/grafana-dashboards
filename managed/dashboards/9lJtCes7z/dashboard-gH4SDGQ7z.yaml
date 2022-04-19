@@ -159,6 +159,50 @@ spec:
                     steps:
                         - color: green
                           value: null
+            overrides: []
+          gridPos:
+            h: 6
+            w: 5
+            x: 10
+            "y": 0
+          id: 8
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: auto
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: avg(vault_expire_num_leases)
+              interval: ""
+              legendFormat: ""
+              refId: A
+          timeFrom: 30d
+          title: Lease Count
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
                 unit: s
             overrides: []
           gridPos:
@@ -190,6 +234,72 @@ spec:
               refId: A
           title: Host Uptime
           type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: normal
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                        - color: red
+                          value: 80
+                unit: s
+            overrides: []
+          gridPos:
+            h: 14
+            w: 24
+            x: 0
+            "y": 18
+          id: 10
+          options:
+            legend:
+                calcs: []
+                displayMode: table
+                placement: right
+            tooltip:
+                mode: single
+                sort: none
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: vault_core_handle_request{quantile=~"0.9+"}
+              hide: false
+              interval: ""
+              legendFormat: Request Handle Duration - {{ quantile }} percentile
+              refId: B
+          title: Request Handle Duration - Percentiles
+          type: timeseries
     schemaVersion: 35
     style: dark
     tags:
