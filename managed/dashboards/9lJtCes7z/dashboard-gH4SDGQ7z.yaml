@@ -203,6 +203,51 @@ spec:
                     steps:
                         - color: green
                           value: null
+                unit: none
+            overrides: []
+          gridPos:
+            h: 5
+            w: 5
+            x: 10
+            "y": 6
+          id: 13
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: auto
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: false
+              expr: rate(vault_cache_hit[5m]
+              instant: true
+              interval: ""
+              legendFormat: '{{ host }}'
+              refId: A
+          title: Cache Hit Ratio
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
                 unit: s
             overrides: []
           gridPos:
@@ -293,12 +338,144 @@ spec:
                 type: prometheus
                 uid: ${datasource}
               exemplar: true
-              expr: vault_core_handle_request{quantile=~"0.9+"}
+              expr: vault_core_handle_request{quantile=~"0.*"}
               hide: false
               interval: ""
               legendFormat: Request Handle Duration - {{ quantile }} percentile
               refId: B
           title: Request Handle Duration - Percentiles
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: normal
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                        - color: red
+                          value: 80
+                unit: s
+            overrides: []
+          gridPos:
+            h: 14
+            w: 24
+            x: 0
+            "y": 32
+          id: 11
+          options:
+            legend:
+                calcs: []
+                displayMode: table
+                placement: right
+            tooltip:
+                mode: single
+                sort: none
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: vault_barrier_get
+              hide: false
+              interval: ""
+              legendFormat: Barrier Get Duration {{ instance }} - {{ quantile }} Percentile
+              refId: B
+          title: Barrier Get Duration - Percentiles
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    spanNulls: true
+                    stacking:
+                        group: A
+                        mode: normal
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                        - color: red
+                          value: 80
+                unit: none
+            overrides: []
+          gridPos:
+            h: 14
+            w: 24
+            x: 0
+            "y": 46
+          id: 12
+          options:
+            legend:
+                calcs: []
+                displayMode: table
+                placement: right
+            tooltip:
+                mode: single
+                sort: none
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: vault_barrier_estimated_encryptions
+              hide: false
+              interval: ""
+              legendFormat: Barrier Get Duration {{ instance }} - {{ quantile }} Percentile
+              refId: B
+          title: Barrier Get Duration - Percentiles
           type: timeseries
     schemaVersion: 35
     style: dark
