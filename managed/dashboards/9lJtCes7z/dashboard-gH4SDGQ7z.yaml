@@ -21,7 +21,7 @@ spec:
     editable: true
     fiscalYearStartMonth: 0
     graphTooltip: 0
-    iteration: 1.65039252832e+12
+    iteration: 1.65039255711e+12
     links: []
     liveNow: false
     panels:
@@ -115,6 +115,9 @@ spec:
                     - sum
                 show: false
             showHeader: true
+            sortBy:
+                - desc: true
+                  displayName: Value
           pluginVersion: 8.4.6
           targets:
             - datasource:
