@@ -21,7 +21,7 @@ spec:
     editable: true
     fiscalYearStartMonth: 0
     graphTooltip: 0
-    iteration: 1.65039255711e+12
+    iteration: 1.650392557118e+12
     links: []
     liveNow: false
     panels:
@@ -144,7 +144,10 @@ spec:
                     mount_point: false
                     namespace: true
                 indexByName: {}
-                renameByName: {}
+                renameByName:
+                    Value: Count
+                    cluster: ""
+                    mount_point: Mountpoint
           type: table
         - datasource:
             type: prometheus
@@ -380,7 +383,7 @@ spec:
                 type: prometheus
                 uid: ${datasource}
               exemplar: false
-              expr: vault_raft_leader_lastContact{quantile="0.99"}
+              expr: vault_raft_leader_lastContact{quantile="$quantile"}
               instant: true
               interval: ""
               legendFormat: ""
@@ -446,7 +449,7 @@ spec:
                 type: prometheus
                 uid: ${datasource}
               exemplar: true
-              expr: vault_core_handle_request{quantile=~"0.*"}
+              expr: vault_core_handle_request{quantile="$quantile"}
               hide: false
               interval: ""
               legendFormat: Request Handle Duration - {{ quantile }} percentile
@@ -512,7 +515,7 @@ spec:
                 type: prometheus
                 uid: ${datasource}
               exemplar: true
-              expr: vault_barrier_get
+              expr: vault_barrier_get{quantile="$quantile"}
               hide: false
               interval: ""
               legendFormat: Barrier Get Duration - {{ host }} - {{ quantile }} Percentile
@@ -522,6 +525,7 @@ spec:
         - datasource:
             type: prometheus
             uid: ${datasource}
+          description: Duration of time taken by token checks handled by Vault core
           fieldConfig:
             defaults:
                 color:
@@ -578,12 +582,12 @@ spec:
                 type: prometheus
                 uid: ${datasource}
               exemplar: true
-              expr: vault_core_check_token
+              expr: vault_core_check_token{quantile="$quantile"}
               hide: false
               interval: ""
               legendFormat: Token Check Duration {{ instance }} - {{ quantile }} Percentile
               refId: B
-          title: Barrier Get Duration - Percentiles
+          title: Token Check Duration - Percentiles
           type: timeseries
     schemaVersion: 35
     style: dark
@@ -608,6 +612,28 @@ spec:
               regex: grafanacloud-mitol.*
               skipUrlSync: false
               type: datasource
+            - current:
+                selected: false
+                text: "0.5"
+                value: "0.5"
+              hide: 0
+              includeAll: false
+              multi: false
+              name: quantile
+              options:
+                - selected: true
+                  text: "0.5"
+                  value: "0.5"
+                - selected: false
+                  text: "0.9"
+                  value: "0.9"
+                - selected: false
+                  text: "0.99"
+                  value: "0.99"
+              query: 0.5,0.9,0.99
+              queryValue: ""
+              skipUrlSync: false
+              type: custom
     time:
         from: now-2d
         to: now
