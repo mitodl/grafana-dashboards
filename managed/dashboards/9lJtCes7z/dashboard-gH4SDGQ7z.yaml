@@ -117,7 +117,7 @@ spec:
             showHeader: true
             sortBy:
                 - desc: true
-                  displayName: Value
+                  displayName: Count
           pluginVersion: 8.4.6
           targets:
             - datasource:
