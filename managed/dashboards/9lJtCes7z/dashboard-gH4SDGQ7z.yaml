@@ -21,10 +21,20 @@ spec:
     editable: true
     fiscalYearStartMonth: 0
     graphTooltip: 0
-    iteration: 1.65046816657e+12
+    iteration: 1.650469062616e+12
     links: []
     liveNow: false
     panels:
+        - collapsed: false
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 0
+          id: 27
+          panels: []
+          title: General Status
+          type: row
         - datasource:
             type: prometheus
             uid: ${datasource}
@@ -55,7 +65,7 @@ spec:
             h: 4
             w: 4
             x: 0
-            "y": 0
+            "y": 1
           id: 14
           options:
             colorMode: value
@@ -80,7 +90,7 @@ spec:
               interval: ""
               legendFormat: ""
               refId: A
-          title: Seal Status
+          title: Overall Status
           type: stat
         - datasource:
             type: prometheus
@@ -106,7 +116,7 @@ spec:
             h: 16
             w: 6
             x: 4
-            "y": 0
+            "y": 1
           id: 4
           options:
             footer:
@@ -167,7 +177,7 @@ spec:
             h: 6
             w: 3
             x: 10
-            "y": 0
+            "y": 1
           id: 8
           options:
             colorMode: value
@@ -211,10 +221,10 @@ spec:
                 unit: percentunit
             overrides: []
           gridPos:
-            h: 15
-            w: 4
+            h: 16
+            w: 5
             x: 13
-            "y": 0
+            "y": 1
           id: 21
           interval: 5m
           options:
@@ -259,10 +269,10 @@ spec:
                 unit: percentunit
             overrides: []
           gridPos:
-            h: 15
-            w: 4
-            x: 17
-            "y": 0
+            h: 16
+            w: 6
+            x: 18
+            "y": 1
           id: 22
           interval: 5m
           options:
@@ -328,7 +338,7 @@ spec:
             h: 4
             w: 4
             x: 0
-            "y": 4
+            "y": 5
           id: 2
           options:
             colorMode: value
@@ -378,7 +388,7 @@ spec:
             h: 5
             w: 3
             x: 10
-            "y": 6
+            "y": 7
           id: 13
           interval: 5m
           options:
@@ -412,6 +422,109 @@ spec:
             defaults:
                 color:
                     mode: thresholds
+                mappings:
+                    - options:
+                        "1":
+                            index: 0
+                            text: UNHEALTHY
+                        "2":
+                            index: 1
+                            text: HEALTHY
+                      type: value
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: red
+                          value: null
+                        - color: red
+                          value: 1
+                        - color: green
+                          value: 2
+            overrides: []
+          gridPos:
+            h: 4
+            w: 4
+            x: 0
+            "y": 9
+          id: 23
+          options:
+            colorMode: value
+            graphMode: none
+            justifyMode: auto
+            orientation: auto
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: (1 + avg(vault_autopilot_node_healthy{}))
+              format: time_series
+              instant: false
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Autopilot Status
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          description: 'Time since the leader last contacted all follower nodes. '
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                unit: ms
+            overrides: []
+          gridPos:
+            h: 5
+            w: 3
+            x: 10
+            "y": 12
+          id: 15
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: auto
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: vault_raft_leader_lastContact{quantile="$quantile"}
+              instant: false
+              interval: ""
+              legendFormat: ""
+              refId: A
+          title: Raft Leader Last Contact
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
                 mappings: []
                 thresholds:
                     mode: absolute
@@ -424,7 +537,7 @@ spec:
             h: 8
             w: 4
             x: 0
-            "y": 8
+            "y": 13
           id: 6
           options:
             colorMode: value
@@ -452,30 +565,32 @@ spec:
         - datasource:
             type: prometheus
             uid: ${datasource}
-          description: 'Time since the leader last contacted all follower nodes. '
+          description: ""
           fieldConfig:
             defaults:
                 color:
                     mode: thresholds
+                decimals: 2
                 mappings: []
                 thresholds:
                     mode: absolute
                     steps:
                         - color: green
                           value: null
-                unit: ms
+                unit: none
             overrides: []
           gridPos:
             h: 5
             w: 3
             x: 10
-            "y": 11
-          id: 15
+            "y": 17
+          id: 24
+          interval: 5m
           options:
             colorMode: value
             graphMode: area
             justifyMode: auto
-            orientation: auto
+            orientation: horizontal
             reduceOptions:
                 calcs:
                     - lastNotNull
@@ -487,13 +602,14 @@ spec:
             - datasource:
                 type: prometheus
                 uid: ${datasource}
-              exemplar: false
-              expr: vault_raft_leader_lastContact{quantile="$quantile"}
-              instant: true
+              exemplar: true
+              expr: rate(vault_raft_apply[5m])
+              hide: false
+              instant: false
               interval: ""
-              legendFormat: ""
-              refId: A
-          title: Raft Leader Last Contact
+              legendFormat: '{{ host }}'
+              refId: B
+          title: Raft Apply Operations
           type: stat
         - datasource:
             type: prometheus
@@ -514,8 +630,8 @@ spec:
           gridPos:
             h: 8
             w: 3
-            x: 4
-            "y": 16
+            x: 13
+            "y": 17
           id: 16
           interval: 5m
           options:
@@ -561,8 +677,8 @@ spec:
           gridPos:
             h: 8
             w: 3
-            x: 7
-            "y": 16
+            x: 16
+            "y": 17
           id: 18
           interval: 5m
           options:
@@ -608,8 +724,8 @@ spec:
           gridPos:
             h: 8
             w: 3
-            x: 10
-            "y": 16
+            x: 19
+            "y": 17
           id: 17
           interval: 5m
           options:
@@ -636,205 +752,697 @@ spec:
               refId: A
           title: Golang Go Routines
           type: stat
-        - datasource:
-            type: prometheus
-            uid: ${datasource}
-          fieldConfig:
-            defaults:
-                color:
-                    mode: palette-classic
-                custom:
-                    axisLabel: ""
-                    axisPlacement: auto
-                    barAlignment: 0
-                    drawStyle: line
-                    fillOpacity: 0
-                    gradientMode: none
-                    hideFrom:
-                        legend: false
-                        tooltip: false
-                        viz: false
-                    lineInterpolation: linear
-                    lineWidth: 1
-                    pointSize: 5
-                    scaleDistribution:
-                        type: linear
-                    showPoints: never
-                    spanNulls: true
-                    stacking:
-                        group: A
-                        mode: normal
-                    thresholdsStyle:
-                        mode: "off"
-                mappings: []
-                thresholds:
-                    mode: absolute
-                    steps:
-                        - color: green
-                          value: null
-                        - color: red
-                          value: 80
-                unit: ms
-            overrides: []
+        - collapsed: true
           gridPos:
-            h: 14
+            h: 1
             w: 24
             x: 0
-            "y": 24
-          id: 10
-          options:
-            legend:
-                calcs: []
-                displayMode: table
-                placement: right
-            tooltip:
-                mode: single
-                sort: none
-          targets:
+            "y": 25
+          id: 29
+          panels:
             - datasource:
                 type: prometheus
                 uid: ${datasource}
-              exemplar: true
-              expr: vault_core_handle_request{quantile="$quantile"}
-              hide: false
-              interval: ""
-              legendFormat: Request Handle Duration - {{ quantile }} percentile
-              refId: B
-          title: Request Handle Duration - Percentiles
-          type: timeseries
-        - datasource:
-            type: prometheus
-            uid: ${datasource}
-          fieldConfig:
-            defaults:
-                color:
-                    mode: palette-classic
-                custom:
-                    axisLabel: ""
-                    axisPlacement: auto
-                    barAlignment: 0
-                    drawStyle: line
-                    fillOpacity: 0
-                    gradientMode: none
-                    hideFrom:
-                        legend: false
-                        tooltip: false
-                        viz: false
-                    lineInterpolation: linear
-                    lineWidth: 1
-                    pointSize: 5
-                    scaleDistribution:
-                        type: linear
-                    showPoints: never
-                    spanNulls: true
-                    stacking:
-                        group: A
-                        mode: normal
-                    thresholdsStyle:
-                        mode: "off"
-                mappings: []
-                thresholds:
-                    mode: absolute
-                    steps:
-                        - color: green
-                          value: null
-                        - color: red
-                          value: 80
-                unit: ms
-            overrides: []
-          gridPos:
-            h: 14
-            w: 24
-            x: 0
-            "y": 38
-          id: 11
-          options:
-            legend:
-                calcs: []
-                displayMode: table
-                placement: right
-            tooltip:
-                mode: single
-                sort: none
-          targets:
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 26
+              id: 10
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_core_handle_request{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Request Handle Duration - {{ quantile }} percentile
+                  refId: B
+              title: Request Handle Duration
+              type: timeseries
             - datasource:
                 type: prometheus
                 uid: ${datasource}
-              exemplar: true
-              expr: vault_barrier_get{quantile="$quantile"}
-              hide: false
-              interval: ""
-              legendFormat: Barrier Get Duration - {{ host }} - {{ quantile }} Percentile
-              refId: B
-          title: Barrier Get Duration - Percentiles
-          type: timeseries
-        - datasource:
-            type: prometheus
-            uid: ${datasource}
-          description: Duration of time taken by token checks handled by Vault core
-          fieldConfig:
-            defaults:
-                color:
-                    mode: palette-classic
-                custom:
-                    axisLabel: ""
-                    axisPlacement: auto
-                    barAlignment: 0
-                    drawStyle: line
-                    fillOpacity: 0
-                    gradientMode: none
-                    hideFrom:
-                        legend: false
-                        tooltip: false
-                        viz: false
-                    lineInterpolation: linear
-                    lineWidth: 1
-                    pointSize: 5
-                    scaleDistribution:
-                        type: linear
-                    showPoints: never
-                    spanNulls: true
-                    stacking:
-                        group: A
-                        mode: normal
-                    thresholdsStyle:
-                        mode: "off"
-                mappings: []
-                thresholds:
-                    mode: absolute
-                    steps:
-                        - color: green
-                          value: null
-                        - color: red
-                          value: 80
-                unit: ms
-            overrides: []
+              description: Duration of time taken by token checks handled by Vault core
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 40
+              id: 12
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_core_check_token{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Token Check Duration {{ instance }} - {{ quantile }} Percentile
+                  refId: B
+              title: Token Check Duration - Percentiles
+              type: timeseries
+          title: Request Performance
+          type: row
+        - collapsed: true
           gridPos:
-            h: 14
+            h: 1
             w: 24
             x: 0
-            "y": 52
-          id: 12
-          options:
-            legend:
-                calcs: []
-                displayMode: table
-                placement: right
-            tooltip:
-                mode: single
-                sort: none
-          targets:
+            "y": 26
+          id: 31
+          panels:
             - datasource:
                 type: prometheus
                 uid: ${datasource}
-              exemplar: true
-              expr: vault_core_check_token{quantile="$quantile"}
-              hide: false
-              interval: ""
-              legendFormat: Token Check Duration {{ instance }} - {{ quantile }} Percentile
-              refId: B
-          title: Token Check Duration - Percentiles
-          type: timeseries
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 27
+              id: 25
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_raft_storage_get{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Raft Get Duration - {{ host }} - {{ quantile }} Percentile
+                  refId: B
+              title: Raft Get Duration - Percentiles
+              type: timeseries
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 41
+              id: 32
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_raft_storage_put{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Raft Put Duration - {{ host }} - {{ quantile }} Percentile
+                  refId: B
+              title: Raft Put Duration - Percentiles
+              type: timeseries
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 55
+              id: 33
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_raft_storage_list{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Raft List Duration - {{ host }} - {{ quantile }} Percentile
+                  refId: B
+              title: Raft List Duration - Percentiles
+              type: timeseries
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 69
+              id: 34
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_raft_storage_delete{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Raft Delete Duration - {{ host }} - {{ quantile }} Percentile
+                  refId: B
+              title: Raft Delete Duration - Percentiles
+              type: timeseries
+          title: Raft Performance
+          type: row
+        - collapsed: true
+          gridPos:
+            h: 1
+            w: 24
+            x: 0
+            "y": 27
+          id: 36
+          panels:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 28
+              id: 11
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_barrier_get{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Barrier Get Duration - {{ host }} - {{ quantile }} Percentile
+                  refId: B
+              title: Barrier Get Duration
+              type: timeseries
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 42
+              id: 37
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_barrier_put{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Barrier Get Duration - {{ host }} - {{ quantile }} Percentile
+                  refId: B
+              title: Barrier Get Duration
+              type: timeseries
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 56
+              id: 38
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_barrier_list{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Barrier Get Duration - {{ host }} - {{ quantile }} Percentile
+                  refId: B
+              title: Barrier Get Duration
+              type: timeseries
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              fieldConfig:
+                defaults:
+                    color:
+                        mode: palette-classic
+                    custom:
+                        axisLabel: ""
+                        axisPlacement: auto
+                        barAlignment: 0
+                        drawStyle: line
+                        fillOpacity: 0
+                        gradientMode: none
+                        hideFrom:
+                            legend: false
+                            tooltip: false
+                            viz: false
+                        lineInterpolation: linear
+                        lineWidth: 1
+                        pointSize: 5
+                        scaleDistribution:
+                            type: linear
+                        showPoints: never
+                        spanNulls: true
+                        stacking:
+                            group: A
+                            mode: normal
+                        thresholdsStyle:
+                            mode: "off"
+                    mappings: []
+                    thresholds:
+                        mode: absolute
+                        steps:
+                            - color: green
+                              value: null
+                            - color: red
+                              value: 80
+                    unit: ms
+                overrides: []
+              gridPos:
+                h: 14
+                w: 24
+                x: 0
+                "y": 70
+              id: 39
+              options:
+                legend:
+                    calcs: []
+                    displayMode: table
+                    placement: right
+                tooltip:
+                    mode: single
+                    sort: none
+              targets:
+                - datasource:
+                    type: prometheus
+                    uid: ${datasource}
+                  exemplar: true
+                  expr: vault_barrier_delete{quantile="$quantile"}
+                  hide: false
+                  interval: ""
+                  legendFormat: Barrier Get Duration - {{ host }} - {{ quantile }} Percentile
+                  refId: B
+              title: Barrier Get Duration
+              type: timeseries
+          title: Barrier Performance
+          type: row
     schemaVersion: 35
     style: dark
     tags:
@@ -859,21 +1467,21 @@ spec:
               skipUrlSync: false
               type: datasource
             - current:
-                selected: false
-                text: "0.5"
-                value: "0.5"
+                selected: true
+                text: "0.99"
+                value: "0.99"
               hide: 0
               includeAll: false
               multi: false
               name: quantile
               options:
-                - selected: true
+                - selected: false
                   text: "0.5"
                   value: "0.5"
                 - selected: false
                   text: "0.9"
                   value: "0.9"
-                - selected: false
+                - selected: true
                   text: "0.99"
                   value: "0.99"
               query: 0.5,0.9,0.99
