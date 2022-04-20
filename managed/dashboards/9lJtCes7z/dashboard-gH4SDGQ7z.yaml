@@ -21,7 +21,7 @@ spec:
     editable: true
     fiscalYearStartMonth: 0
     graphTooltip: 0
-    iteration: 1.650392557118e+12
+    iteration: 1.650397829138e+12
     links: []
     liveNow: false
     panels:
@@ -196,6 +196,147 @@ spec:
         - datasource:
             type: prometheus
             uid: ${datasource}
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                unit: none
+            overrides: []
+          gridPos:
+            h: 6
+            w: 3
+            x: 15
+            "y": 0
+          id: 16
+          interval: 5m
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: vault_runtime_heap_objects
+              instant: false
+              interval: ""
+              legendFormat: '{{ host }}'
+              refId: A
+          title: Golang Heap Objects
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                unit: none
+            overrides: []
+          gridPos:
+            h: 6
+            w: 3
+            x: 18
+            "y": 0
+          id: 17
+          interval: 5m
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: vault_runtime_num_goroutines
+              instant: false
+              interval: ""
+              legendFormat: '{{ host }}'
+              refId: A
+          title: Golang Go Routines
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                unit: decbytes
+            overrides: []
+          gridPos:
+            h: 6
+            w: 3
+            x: 21
+            "y": 0
+          id: 18
+          interval: 5m
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: vault_runtime_alloc_bytes
+              instant: false
+              interval: ""
+              legendFormat: '{{ host }}'
+              refId: A
+          title: Golang Allocated Memory
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
           fieldConfig:
             defaults:
                 color:
@@ -299,6 +440,111 @@ spec:
               legendFormat: '{{ host }}'
               refId: A
           title: Cache Hit Ratio
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                decimals: 2
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                unit: percentunit
+            overrides: []
+          gridPos:
+            h: 6
+            w: 3
+            x: 18
+            "y": 6
+          id: 21
+          interval: 5m
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: 1 - (sum by (host) (rate(host_cpu_seconds_total{mode='idle',application="vault"}[5m])) / (count by (host) (host_cpu_seconds_total{mode='idle', application="vault"})))
+              hide: false
+              instant: false
+              interval: ""
+              legendFormat: '{{ host }}'
+              refId: B
+          title: CPU Usage
+          type: stat
+        - datasource:
+            type: prometheus
+            uid: ${datasource}
+          description: ""
+          fieldConfig:
+            defaults:
+                color:
+                    mode: thresholds
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                unit: percentunit
+            overrides: []
+          gridPos:
+            h: 6
+            w: 3
+            x: 21
+            "y": 6
+          id: 22
+          interval: 5m
+          options:
+            colorMode: value
+            graphMode: area
+            justifyMode: auto
+            orientation: horizontal
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            textMode: auto
+          pluginVersion: 8.4.6
+          targets:
+            - datasource:
+                type: prometheus
+                uid: ${datasource}
+              exemplar: true
+              expr: |
+                avg by (host) (
+                  host_memory_total_bytes{job="integrations/linux_host", application="vault"}
+                -
+                  host_memory_free_bytes{job="integrations/linux_host", application="vault"}
+                -
+                  host_memory_buffers_bytes{job="integrations/linux_host", application="vault"}
+                -
+                  host_memory_cached_bytes{job="integrations/linux_host", application="vault"}
+                ) / avg by (host) (host_memory_total_bytes{job="integrations/linux_host", application="vault"})
+              instant: false
+              interval: ""
+              legendFormat: '{{ host }}'
+              refId: A
+          title: Used Memory
           type: stat
         - datasource:
             type: prometheus
