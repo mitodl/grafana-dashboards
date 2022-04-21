@@ -4,6 +4,7 @@ metadata:
     name: 9lJtCes7z
 spec:
     canAdmin: true
+    canDelete: true
     canEdit: true
     canSave: true
     created: "2022-04-05T15:23:14Z"
