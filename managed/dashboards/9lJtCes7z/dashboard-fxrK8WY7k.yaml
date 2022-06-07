@@ -1,0 +1,521 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: Dashboard
+metadata:
+    folder: 9lJtCes7z
+    name: fxrK8WY7k
+spec:
+    annotations:
+        list:
+            - builtIn: 1
+              datasource:
+                type: datasource
+                uid: grafana
+              enable: true
+              hide: true
+              iconColor: rgba(0, 211, 255, 1)
+              name: Annotations & Alerts
+              target:
+                limit: 100
+                matchAny: false
+                tags: []
+                type: dashboard
+              type: dashboard
+    editable: true
+    fiscalYearStartMonth: 0
+    graphTooltip: 0
+    iteration: 1.65461572662e+12
+    links: []
+    liveNow: false
+    panels:
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          fieldConfig:
+            defaults:
+                mappings: []
+                thresholds:
+                    mode: percentage
+                    steps:
+                        - color: green
+                          value: null
+                        - color: orange
+                          value: 70
+                        - color: red
+                          value: 85
+            overrides: []
+          gridPos:
+            h: 8
+            w: 6
+            x: 0
+            "y": 0
+          id: 16
+          options:
+            orientation: auto
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showThresholdLabels: false
+            showThresholdMarkers: true
+          pluginVersion: 8.5.4
+          repeat: environment
+          repeatDirection: h
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="$environment"}[5m])/1024/1024)
+              refId: A
+          title: $environment
+          type: gauge
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          description: ""
+          fieldConfig:
+            defaults:
+                mappings: []
+                thresholds:
+                    mode: percentage
+                    steps:
+                        - color: green
+                          value: null
+                        - color: orange
+                          value: 70
+                        - color: red
+                          value: 85
+            overrides: []
+          gridPos:
+            h: 8
+            w: 12
+            x: 12
+            "y": 8
+          id: 14
+          maxPerRow: 4
+          options:
+            orientation: auto
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showThresholdLabels: false
+            showThresholdMarkers: false
+          pluginVersion: 8.5.4
+          repeatDirection: v
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum(bytes_over_time({environment="$environment"}[1d]))/1e6
+              refId: A
+          title: Usage by Environment
+          type: gauge
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          description: ""
+          fieldConfig:
+            defaults:
+                mappings: []
+                thresholds:
+                    mode: percentage
+                    steps:
+                        - color: green
+                          value: null
+                        - color: orange
+                          value: 70
+                        - color: red
+                          value: 85
+            overrides: []
+          gridPos:
+            h: 8
+            w: 12
+            x: 0
+            "y": 16
+          id: 13
+          maxPerRow: 4
+          options:
+            orientation: auto
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            showThresholdLabels: false
+            showThresholdMarkers: false
+          pluginVersion: 8.5.4
+          repeat: application
+          repeatDirection: v
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum(bytes_over_time({environment="$environment",application="$application"}[1d]))/1e6
+              refId: A
+          title: Usage by Environment > Application
+          type: gauge
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                mappings: []
+            overrides: []
+          gridPos:
+            h: 9
+            w: 24
+            x: 0
+            "y": 24
+          id: 9
+          maxPerRow: 3
+          options:
+            displayLabels:
+                - name
+                - value
+            legend:
+                displayMode: list
+                placement: right
+                values: []
+            pieType: donut
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            tooltip:
+                mode: single
+                sort: none
+          pluginVersion: 8.4.1
+          repeat: application
+          repeatDirection: h
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="$environment",application="$application"}[5m])/1024/1024)
+              legendFormat: $application
+              refId: A
+          title: Log Usage By Environment
+          type: piechart
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                mappings: []
+            overrides: []
+          gridPos:
+            h: 9
+            w: 24
+            x: 0
+            "y": 33
+          id: 2
+          options:
+            displayLabels:
+                - percent
+            legend:
+                displayMode: list
+                placement: right
+                values: []
+            pieType: pie
+            reduceOptions:
+                calcs:
+                    - lastNotNull
+                fields: ""
+                values: false
+            tooltip:
+                mode: single
+                sort: none
+          pluginVersion: 8.4.1
+          repeat: application
+          repeatDirection: h
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="$environment",application="$application"}[5m])/1024/1024)
+              legendFormat: $application
+              refId: A
+          title: Log Usage By Environment
+          type: piechart
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 25
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: normal
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                        - color: red
+                          value: 80
+            overrides: []
+          gridPos:
+            h: 16
+            w: 24
+            x: 0
+            "y": 42
+          id: 10
+          options:
+            legend:
+                calcs: []
+                displayMode: list
+                placement: bottom
+            tooltip:
+                mode: single
+                sort: none
+          pluginVersion: 8.4.1
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="mitx-ci", application="consul"}[5m])/1024/1024)
+              legendFormat: mitx-ci
+              refId: A
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="mitx-staging-ci"}[5m])/1024/1024)
+              hide: false
+              legendFormat: mitx-staging-ci
+              refId: B
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="mitxonline-ci"}[5m])/1024/1024)
+              hide: false
+              legendFormat: mitxonline-ci
+              refId: C
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="operations-ci"}[5m])/1024/1024)
+              hide: false
+              legendFormat: operations-ci
+              refId: D
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="xpro-ci"}[5m])/1024/1024)
+              hide: false
+              legendFormat: xpro-ci
+              refId: E
+          title: Log Usage By Environment
+          type: timeseries
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 25
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: normal
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                        - color: red
+                          value: 80
+            overrides: []
+          gridPos:
+            h: 16
+            w: 24
+            x: 0
+            "y": 58
+          id: 11
+          options:
+            legend:
+                calcs: []
+                displayMode: list
+                placement: bottom
+            tooltip:
+                mode: single
+                sort: none
+          pluginVersion: 8.4.1
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="mitx-ci"}[5m])/1024/1024)
+              legendFormat: mitx-ci
+              refId: A
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="mitx-staging-ci"}[5m])/1024/1024)
+              hide: false
+              legendFormat: mitx-staging-ci
+              refId: B
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="mitxonline-ci"}[5m])/1024/1024)
+              hide: false
+              legendFormat: mitxonline-ci
+              refId: C
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="operations-ci"}[5m])/1024/1024)
+              hide: false
+              legendFormat: operations-ci
+              refId: D
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              expr: sum by(environment)(bytes_over_time({environment="xpro-ci"}[5m])/1024/1024)
+              hide: false
+              legendFormat: xpro-ci
+              refId: E
+          title: Log Usage By Environment
+          transformations:
+            - id: calculateField
+              options:
+                mode: reduceRow
+                reduce:
+                    include:
+                        - mitxonline-ci
+                        - operations-ci
+                        - xpro-ci
+                        - mitx-ci
+                        - mitx-staging-ci
+                    reducer: sum
+          type: timeseries
+    refresh: ""
+    schemaVersion: 36
+    style: dark
+    tags: []
+    templating:
+        list:
+            - current:
+                selected: true
+                text: apps-ci
+                value: apps-ci
+              datasource:
+                type: loki
+                uid: grafanacloud-logs
+              definition: label_values({}, environment)
+              hide: 0
+              includeAll: true
+              multi: false
+              name: environment
+              options: []
+              query: label_values({}, environment)
+              refresh: 1
+              regex: ""
+              skipUrlSync: false
+              sort: 0
+              type: query
+            - current:
+                selected: false
+                text: consul
+                value: consul
+              datasource:
+                type: loki
+                uid: grafanacloud-logs
+              definition: label_values({environment="$environment"}, application)
+              hide: 0
+              includeAll: false
+              multi: false
+              name: application
+              options: []
+              query: label_values({environment="$environment"}, application)
+              refresh: 1
+              regex: ""
+              skipUrlSync: false
+              sort: 0
+              type: query
+            - current:
+                selected: false
+                text: consul
+                value: consul
+              datasource:
+                type: loki
+                uid: grafanacloud-logs
+              definition: label_values({environment="$environment"}, service)
+              hide: 0
+              includeAll: false
+              multi: false
+              name: service
+              options: []
+              query: label_values({environment="$environment"}, service)
+              refresh: 1
+              regex: ""
+              skipUrlSync: false
+              sort: 0
+              type: query
+    time:
+        from: now-6h
+        to: now
+    timepicker: {}
+    timezone: ""
+    title: Logs By Environment
+    uid: fxrK8WY7k
+    weekStart: ""
