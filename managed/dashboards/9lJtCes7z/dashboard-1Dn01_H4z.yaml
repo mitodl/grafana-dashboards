@@ -1,0 +1,135 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: Dashboard
+metadata:
+    folder: 9lJtCes7z
+    name: 1Dn01_H4z
+spec:
+    annotations:
+        list:
+            - builtIn: 1
+              datasource:
+                type: grafana
+                uid: -- Grafana --
+              enable: true
+              hide: true
+              iconColor: rgba(0, 211, 255, 1)
+              name: Annotations & Alerts
+              target:
+                limit: 100
+                matchAny: false
+                tags: []
+                type: dashboard
+              type: dashboard
+    editable: true
+    fiscalYearStartMonth: 0
+    graphTooltip: 0
+    links: []
+    liveNow: false
+    panels:
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                        - color: red
+                          value: 80
+            overrides: []
+          gridPos:
+            h: 17
+            w: 24
+            x: 0
+            "y": 0
+          id: 2
+          options:
+            legend:
+                calcs: []
+                displayMode: list
+                placement: right
+                showLegend: false
+            tooltip:
+                mode: single
+                sort: none
+          repeat: service_name
+          repeatDirection: h
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              editorMode: code
+              expr: avg by (service) (avg_over_time ( ({application="edxapp", service="$service_name"} | json |unwrap request_time|__error__="")[1m]))
+              legendFormat: '{{ service }}'
+              queryType: range
+              range: true
+              refId: A
+              resolution: 1
+          title: $service_name - NGINX Avg Request Duration
+          type: timeseries
+    schemaVersion: 37
+    style: dark
+    tags: []
+    templating:
+        list:
+            - current:
+                selected: false
+                text: mitx
+                value: mitx
+              datasource:
+                type: loki
+                uid: grafanacloud-logs
+              definition: ""
+              hide: 0
+              includeAll: false
+              multi: false
+              name: service_name
+              options: []
+              query:
+                label: service
+                refId: LokiVariableQueryEditor-VariableQuery
+                stream: ""
+                type: 1
+              refresh: 2
+              regex: (mitx.*|xpro)
+              skipUrlSync: false
+              sort: 0
+              type: query
+    time:
+        from: now-6h
+        to: now
+    timepicker: {}
+    timezone: ""
+    title: edxapp - NGINX Avg Request Duration by Service
+    uid: 1Dn01_H4z
+    weekStart: ""
