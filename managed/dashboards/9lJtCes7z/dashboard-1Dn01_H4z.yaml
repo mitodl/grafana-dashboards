@@ -47,7 +47,7 @@ spec:
                         tooltip: false
                         viz: false
                     lineInterpolation: linear
-                    lineWidth: 1
+                    lineWidth: 2
                     pointSize: 5
                     scaleDistribution:
                         type: linear
