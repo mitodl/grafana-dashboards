@@ -98,6 +98,77 @@ spec:
               resolution: 1
           title: $service_name - NGINX Avg Request Duration
           type: timeseries
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                        - color: red
+                          value: 80
+            overrides: []
+          gridPos:
+            h: 17
+            w: 24
+            x: 0
+            "y": 34
+          id: 3
+          interval: 1m
+          options:
+            legend:
+                calcs: []
+                displayMode: list
+                placement: right
+                showLegend: false
+            tooltip:
+                mode: single
+                sort: none
+          repeatDirection: h
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              editorMode: code
+              expr: avg by (service) (avg_over_time ( ({application="edxapp", service="mitx"} | json  | request_uri=~".*5.111.*" |unwrap request_time|__error__="")[1m]))
+              legendFormat: '{{ service }}'
+              queryType: range
+              range: true
+              refId: A
+              resolution: 1
+          title: MITx - 5.111 Only - NGINX Avg Request Duration
+          type: timeseries
     schemaVersion: 37
     style: dark
     tags: []
