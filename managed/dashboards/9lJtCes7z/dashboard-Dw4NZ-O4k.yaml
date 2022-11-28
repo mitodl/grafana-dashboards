@@ -170,6 +170,7 @@ spec:
             x: 12
             "y": 0
           id: 8
+          interval: 10m
           options:
             legend:
                 calcs: []
@@ -184,7 +185,7 @@ spec:
                 type: loki
                 uid: grafanacloud-logs
               editorMode: code
-              expr: sum by (status) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt | proc_id = `router` [1h]))
+              expr: sum by (status) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt | __error__="" | proc_id = `router` [1h]))
               legendFormat: '{{.status}}'
               queryType: range
               refId: A
@@ -313,6 +314,7 @@ spec:
             x: 12
             "y": 8
           id: 6
+          interval: 10m
           options:
             legend:
                 calcs: []
@@ -327,7 +329,7 @@ spec:
                 type: loki
                 uid: grafanacloud-logs
               editorMode: code
-              expr: sum by (application) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt | proc_id = `router` [1h]))
+              expr: sum by (application) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt |__error__=""| proc_id = `router` [1h]))
               legendFormat: '# of Requests'
               queryType: range
               refId: A
