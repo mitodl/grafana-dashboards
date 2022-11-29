@@ -154,7 +154,6 @@ spec:
                     options:
                         mode: exclude
                         names:
-                            - "200"
                             - "503"
                         prefix: 'All except:'
                         readOnly: true
@@ -335,13 +334,86 @@ spec:
               refId: A
           title: Requests
           type: timeseries
+        - datasource:
+            type: loki
+            uid: grafanacloud-logs
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    lineInterpolation: linear
+                    lineStyle:
+                        fill: solid
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: null
+                        - color: red
+                          value: 80
+                unit: none
+            overrides: []
+          gridPos:
+            h: 16
+            w: 24
+            x: 0
+            "y": 16
+          id: 9
+          interval: 10m
+          options:
+            legend:
+                calcs: []
+                displayMode: table
+                placement: right
+                showLegend: true
+            tooltip:
+                mode: single
+                sort: none
+          pluginVersion: 9.2.5
+          targets:
+            - datasource:
+                type: loki
+                uid: grafanacloud-logs
+              editorMode: code
+              expr: sum by (path) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt | __error__=`` | proc_id = `router` | status = `503` | line_format `{{.path}}` | pattern `/<path>/<_>` | line_format `{{.path}}`[$__interval]))
+              legendFormat: '{{.status}}'
+              queryType: range
+              refId: A
+          title: 503 Returns by path prefix - Bucketed into 10 minute Intervals
+          transformations: []
+          type: timeseries
     schemaVersion: 37
     style: dark
     tags: []
     templating:
         list: []
     time:
-        from: now-6h
+        from: now-3h
         to: now
     timepicker: {}
     timezone: ""
