@@ -87,6 +87,7 @@ spec:
             x: 0
             "y": 0
           id: 2
+          interval: 1m
           options:
             legend:
                 calcs: []
@@ -101,7 +102,7 @@ spec:
                 type: loki
                 uid: grafanacloud-logs
               editorMode: builder
-              expr: avg by(application) (quantile_over_time(0.95, {service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt | unwrap duration(service_extracted) | __error__=`` [5m]))
+              expr: avg by(application) (quantile_over_time(0.95, {service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt | unwrap duration(service_extracted) | __error__=`` [$__interval]))
               queryType: range
               refId: A
           title: Response Times
@@ -154,7 +155,7 @@ spec:
             x: 12
             "y": 0
           id: 8
-          interval: 10m
+          interval: 5m
           options:
             legend:
                 calcs: []
@@ -169,7 +170,7 @@ spec:
                 type: loki
                 uid: grafanacloud-logs
               editorMode: code
-              expr: sum by (status) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt | __error__="" | proc_id = `router` [1h]))
+              expr: sum by (status) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt | __error__="" | proc_id = `router` [$__interval]))
               legendFormat: '{{.status}}'
               queryType: range
               refId: A
@@ -222,6 +223,7 @@ spec:
             x: 0
             "y": 8
           id: 4
+          interval: 5m
           options:
             legend:
                 calcs: []
@@ -236,7 +238,7 @@ spec:
                 type: loki
                 uid: grafanacloud-logs
               editorMode: code
-              expr: sum by(application) (count_over_time({service="heroku", application="xpro"} | json |= `Request timeout` [5m]))
+              expr: sum by(application) (count_over_time({service="heroku", application="xpro"} | json |= `Request timeout` [$__interval]))
               legendFormat: timeouts
               queryType: range
               refId: A
@@ -244,7 +246,7 @@ spec:
                 type: loki
                 uid: grafanacloud-logs
               editorMode: code
-              expr: sum by(application) (count_over_time({service="heroku", application="xpro"} |= `a process holding a robust mutex died. recovering...` [5m]))
+              expr: sum by(application) (count_over_time({service="heroku", application="xpro"} |= `a process holding a robust mutex died. recovering...` [$__interval]))
               hide: false
               legendFormat: deadlocks
               queryType: range
@@ -298,7 +300,7 @@ spec:
             x: 12
             "y": 8
           id: 6
-          interval: 10m
+          interval: 5m
           options:
             legend:
                 calcs: []
@@ -313,7 +315,7 @@ spec:
                 type: loki
                 uid: grafanacloud-logs
               editorMode: code
-              expr: sum by (application) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt |__error__=""| proc_id = `router` [1h]))
+              expr: sum by (application) (count_over_time({service="heroku", application="xpro"} | json | line_format `{{.message}}` | logfmt |__error__=""| proc_id = `router` [$__interval]))
               legendFormat: '# of Requests'
               queryType: range
               refId: A
