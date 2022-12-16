@@ -32,6 +32,7 @@ spec:
                 matchAny: false
                 tags:
                     - deployment
+                    - $application
                 type: tags
     editable: true
     fiscalYearStartMonth: 0
@@ -76,7 +77,6 @@ spec:
                     mode: absolute
                     steps:
                         - color: green
-                          value: null
                         - color: red
                           value: 80
                 unit: s
@@ -144,7 +144,6 @@ spec:
                     mode: absolute
                     steps:
                         - color: green
-                          value: null
                         - color: red
                           value: 80
                 unit: none
@@ -213,7 +212,6 @@ spec:
                     mode: absolute
                     steps:
                         - color: green
-                          value: null
                         - color: red
                           value: 80
             overrides: []
@@ -290,7 +288,6 @@ spec:
                     mode: absolute
                     steps:
                         - color: green
-                          value: null
                         - color: red
                           value: 80
             overrides: []
@@ -360,7 +357,6 @@ spec:
                     mode: absolute
                     steps:
                         - color: green
-                          value: null
                         - color: red
                           value: 80
                 unit: none
@@ -433,7 +429,6 @@ spec:
                     mode: absolute
                     steps:
                         - color: green
-                          value: null
                         - color: red
                           value: 80
                 unit: none
