@@ -7,7 +7,9 @@ spec:
     annotations:
         list:
             - builtIn: 1
-              datasource: -- Grafana --
+              datasource:
+                type: datasource
+                uid: grafana
               enable: true
               hide: true
               iconColor: rgba(0, 211, 255, 1)
@@ -23,7 +25,6 @@ spec:
     fiscalYearStartMonth: 0
     gnetId: 13978
     graphTooltip: 0
-    iteration: 1.650467144407e+12
     links: []
     liveNow: false
     panels:
@@ -35,6 +36,8 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
                     axisLabel: ""
                     axisPlacement: auto
                     barAlignment: 0
@@ -45,6 +48,7 @@ spec:
                         legend: false
                         tooltip: false
                         viz: false
+                    insertNulls: false
                     lineInterpolation: linear
                     lineWidth: 1
                     pointSize: 5
@@ -94,8 +98,9 @@ spec:
             legend:
                 calcs:
                     - lastNotNull
-                displayMode: hidden
+                displayMode: list
                 placement: bottom
+                showLegend: false
             tooltip:
                 mode: single
                 sort: none
@@ -104,13 +109,15 @@ spec:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
-              expr: 1 - (sum by (host) (rate(host_cpu_seconds_total{mode='idle',host="$instance"}[5m])) / (count by (host) (host_cpu_seconds_total{mode='idle', host="$instance"})))
+              expr: 1 - (sum by (instance) (rate(host_cpu_seconds_total{mode='idle',instance="$instance"}[5m])) / (count by (instance) (host_cpu_seconds_total{mode='idle', instance="$instance"})))
               format: time_series
               hide: false
               interval: 1m
               intervalFactor: 5
               legendFormat: User + System + Nice
+              range: true
               refId: A
           title: CPU Usage
           type: timeseries
@@ -122,6 +129,8 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
                     axisLabel: ""
                     axisPlacement: auto
                     barAlignment: 0
@@ -132,6 +141,7 @@ spec:
                         legend: false
                         tooltip: false
                         viz: false
+                    insertNulls: false
                     lineInterpolation: linear
                     lineWidth: 1
                     pointSize: 5
@@ -167,6 +177,7 @@ spec:
                 calcs: []
                 displayMode: list
                 placement: bottom
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -175,32 +186,38 @@ spec:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
-              expr: host_load1{job="integrations/linux_host", host="$instance"}
+              expr: host_load1{job="integrations/linux_host", instance="$instance"}
               format: time_series
               interval: ""
               intervalFactor: 2
               legendFormat: 1m load average
+              range: true
               refId: A
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
-              expr: host_load5{job="integrations/linux_host", host="$instance"}
+              expr: host_load5{job="integrations/linux_host", instance="$instance"}
               format: time_series
               interval: ""
               intervalFactor: 2
               legendFormat: 5m load average
+              range: true
               refId: B
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
-              expr: host_load15{job="integrations/linux_host", host="$instance"}
+              expr: host_load15{job="integrations/linux_host", instance="$instance"}
               format: time_series
               interval: ""
               intervalFactor: 2
               legendFormat: 15m load average
+              range: true
               refId: C
             - datasource:
                 type: prometheus
@@ -222,6 +239,8 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
                     axisLabel: ""
                     axisPlacement: auto
                     barAlignment: 0
@@ -232,6 +251,7 @@ spec:
                         legend: false
                         tooltip: false
                         viz: false
+                    insertNulls: false
                     lineInterpolation: linear
                     lineWidth: 1
                     pointSize: 5
@@ -268,6 +288,7 @@ spec:
                     - last
                 displayMode: list
                 placement: right
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -276,22 +297,24 @@ spec:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
               expr: |
                 (
-                  host_memory_total_bytes{job="integrations/linux_host", host="$instance"}
+                  host_memory_total_bytes{job="integrations/linux_host", instance="$instance"}
                 -
-                  host_memory_free_bytes{job="integrations/linux_host", host="$instance"}
+                  host_memory_free_bytes{job="integrations/linux_host", instance="$instance"}
                 -
-                  host_memory_buffers_bytes{job="integrations/linux_host", host="$instance"}
+                  host_memory_buffers_bytes{job="integrations/linux_host", instance="$instance"}
                 -
-                  host_memory_cached_bytes{job="integrations/linux_host", host="$instance"}
+                  host_memory_cached_bytes{job="integrations/linux_host", instance="$instance"}
                 )
               format: time_series
               hide: false
               interval: ""
               intervalFactor: 2
               legendFormat: memory used
+              range: true
               refId: A
             - datasource:
                 type: prometheus
@@ -363,14 +386,15 @@ spec:
                 values: false
             showThresholdLabels: false
             showThresholdMarkers: true
-          pluginVersion: 8.4.6
+          pluginVersion: 10.2.0-59585pre
           targets:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
               expr: |
-                100 - (avg(host_memory_available_bytes{job="integrations/linux_host", host="$instance"}) / avg(host_memory_total_bytes{job="integrations/linux_host", host="$instance"}) * 100)
+                100 - (avg(host_memory_available_bytes{job="integrations/linux_host", instance="$instance"}) / avg(host_memory_total_bytes{job="integrations/linux_host", instance="$instance"}) * 100)
               format: time_series
               instant: false
               interval: ""
@@ -387,6 +411,8 @@ spec:
                 color:
                     mode: continuous-GrYlRd
                 custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
                     axisLabel: ""
                     axisPlacement: auto
                     barAlignment: 0
@@ -397,6 +423,7 @@ spec:
                         legend: false
                         tooltip: false
                         viz: false
+                    insertNulls: false
                     lineInterpolation: smooth
                     lineWidth: 3
                     pointSize: 5
@@ -430,6 +457,7 @@ spec:
                 calcs: []
                 displayMode: list
                 placement: bottom
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -438,12 +466,14 @@ spec:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
-              expr: rate(host_network_receive_bytes_total{job="integrations/linux_host", host="$instance", device!="lo"}[$__interval])
+              expr: rate(host_network_receive_bytes_total{job="integrations/linux_host", instance="$instance", device!="lo"}[$__interval])
               format: time_series
               interval: 1m
               intervalFactor: 2
               legendFormat: '{{device}}'
+              range: true
               refId: A
           title: 'Network Bytes Received '
           type: timeseries
@@ -455,6 +485,8 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
                     axisLabel: ""
                     axisPlacement: auto
                     barAlignment: 0
@@ -465,6 +497,7 @@ spec:
                         legend: false
                         tooltip: false
                         viz: false
+                    insertNulls: false
                     lineInterpolation: linear
                     lineWidth: 1
                     pointSize: 5
@@ -505,6 +538,7 @@ spec:
                 calcs: []
                 displayMode: list
                 placement: right
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -513,24 +547,28 @@ spec:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
-              expr: rate(host_disk_read_bytes_total{job="integrations/linux_host", host="$instance", device=~"nvme.*"}[$__interval])
+              expr: rate(host_disk_read_bytes_total{job="integrations/linux_host", instance="$instance", device=~"nvme.*"}[$__interval])
               format: time_series
               hide: false
               interval: 1m
               intervalFactor: 2
               legendFormat: '{{device}} - read'
+              range: true
               refId: A
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
-              expr: rate(host_disk_written_bytes_total{job="integrations/linux_host", host="$instance", device=~"nvme.*"}[$__interval])
+              expr: rate(host_disk_written_bytes_total{job="integrations/linux_host", instance="$instance", device=~"nvme.*"}[$__interval])
               format: time_series
               hide: false
               interval: 1m
               intervalFactor: 2
               legendFormat: '{{device}} - written'
+              range: true
               refId: B
           title: Disk I/O
           type: timeseries
@@ -542,6 +580,8 @@ spec:
                 color:
                     mode: continuous-GrYlRd
                 custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
                     axisLabel: ""
                     axisPlacement: auto
                     barAlignment: 0
@@ -552,6 +592,7 @@ spec:
                         legend: false
                         tooltip: false
                         viz: false
+                    insertNulls: false
                     lineInterpolation: smooth
                     lineWidth: 3
                     pointSize: 5
@@ -585,6 +626,7 @@ spec:
                 calcs: []
                 displayMode: list
                 placement: bottom
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -593,12 +635,14 @@ spec:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
-              expr: rate(host_network_transmit_bytes_total{job="integrations/linux_host", host="$instance", device!="lo"}[$__interval])
+              expr: rate(host_network_transmit_bytes_total{job="integrations/linux_host", instance="$instance", device!="lo"}[$__interval])
               format: time_series
               interval: 1m
               intervalFactor: 2
               legendFormat: '{{device}}'
+              range: true
               refId: A
           title: Network Bytes Transmitted
           type: timeseries
@@ -610,6 +654,8 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
                     axisLabel: ""
                     axisPlacement: auto
                     barAlignment: 0
@@ -620,6 +666,7 @@ spec:
                         legend: false
                         tooltip: false
                         viz: false
+                    insertNulls: false
                     lineInterpolation: linear
                     lineWidth: 1
                     pointSize: 5
@@ -657,6 +704,7 @@ spec:
                     - last
                 displayMode: list
                 placement: right
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -665,14 +713,16 @@ spec:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
               expr: |+
-                host_filesystem_used_ratio{job="integrations/linux_host", host="$instance", filesystem!="", device=~"/dev.*"}
+                host_filesystem_used_ratio{job="integrations/linux_host", instance="$instance", filesystem!="", device=~"/dev.*"}
 
               format: time_series
               interval: ""
               intervalFactor: 2
               legendFormat: '{{device}} - used %'
+              range: true
               refId: A
           title: Disk Space Usage - Percent
           type: timeseries
@@ -684,6 +734,8 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisCenteredZero: false
+                    axisColorMode: text
                     axisLabel: ""
                     axisPlacement: auto
                     barAlignment: 0
@@ -694,6 +746,7 @@ spec:
                         legend: false
                         tooltip: false
                         viz: false
+                    insertNulls: false
                     lineInterpolation: linear
                     lineWidth: 1
                     pointSize: 5
@@ -744,6 +797,7 @@ spec:
                     - last
                 displayMode: list
                 placement: right
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -752,32 +806,36 @@ spec:
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
               expr: |+
-                host_filesystem_used_bytes{job="integrations/linux_host", host="$instance", filesystem!="", device=~"/dev.*"}
+                host_filesystem_used_bytes{job="integrations/linux_host", instance="$instance", filesystem!="", device=~"/dev.*"}
 
               format: time_series
               interval: ""
               intervalFactor: 2
               legendFormat: '{{device}} - used'
+              range: true
               refId: A
             - datasource:
                 type: prometheus
                 uid: grafanacloud-prom
+              editorMode: code
               exemplar: true
               expr: |+
-                host_filesystem_free_bytes{job="integrations/linux_host", host="$instance", filesystem!="", device=~"/dev.*"}
+                host_filesystem_free_bytes{job="integrations/linux_host", instance="$instance", filesystem!="", device=~"/dev.*"}
 
               format: time_series
               hide: false
               interval: ""
               intervalFactor: 2
               legendFormat: '{{device}} - available'
+              range: true
               refId: B
           title: Disk Space Usage - Raw
           type: timeseries
     refresh: ""
-    schemaVersion: 35
+    schemaVersion: 38
     style: dark
     tags:
         - node
@@ -880,15 +938,15 @@ spec:
                 value: ip-172-19-0-214
               datasource:
                 uid: $datasource
-              definition: label_values(host_uptime{job="integrations/linux_host", environment=~"$environment", application=~"$application", service=~"$service"},host)
+              definition: label_values(host_uptime{job="integrations/linux_host", environment=~"$environment", application=~"$application", service=~"$service"},instance)
               hide: 0
               includeAll: false
               multi: false
               name: instance
               options: []
               query:
-                query: label_values(host_uptime{job="integrations/linux_host", environment=~"$environment", application=~"$application", service=~"$service"},host)
-                refId: StandardVariableQuery
+                query: label_values(host_uptime{job="integrations/linux_host", environment=~"$environment", application=~"$application", service=~"$service"},instance)
+                refId: PrometheusVariableQueryEditor-VariableQuery
               refresh: 2
               regex: ""
               skipUrlSync: false
