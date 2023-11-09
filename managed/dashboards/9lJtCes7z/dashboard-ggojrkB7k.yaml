@@ -36,6 +36,7 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisBorderShow: false
                     axisCenteredZero: false
                     axisColorMode: text
                     axisLabel: ""
@@ -129,6 +130,7 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisBorderShow: false
                     axisCenteredZero: false
                     axisColorMode: text
                     axisLabel: ""
@@ -239,6 +241,7 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisBorderShow: false
                     axisCenteredZero: false
                     axisColorMode: text
                     axisLabel: ""
@@ -378,6 +381,8 @@ spec:
           links: []
           maxDataPoints: 100
           options:
+            minVizHeight: 75
+            minVizWidth: 75
             orientation: auto
             reduceOptions:
                 calcs:
@@ -386,7 +391,7 @@ spec:
                 values: false
             showThresholdLabels: false
             showThresholdMarkers: true
-          pluginVersion: 10.2.0-59585pre
+          pluginVersion: 10.3.0-63137
           targets:
             - datasource:
                 type: prometheus
@@ -411,6 +416,7 @@ spec:
                 color:
                     mode: continuous-GrYlRd
                 custom:
+                    axisBorderShow: false
                     axisCenteredZero: false
                     axisColorMode: text
                     axisLabel: ""
@@ -444,6 +450,7 @@ spec:
                           value: null
                         - color: red
                           value: 80
+                unit: bytes
             overrides: []
           gridPos:
             h: 7
@@ -485,6 +492,7 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisBorderShow: false
                     axisCenteredZero: false
                     axisColorMode: text
                     axisLabel: ""
@@ -580,6 +588,7 @@ spec:
                 color:
                     mode: continuous-GrYlRd
                 custom:
+                    axisBorderShow: false
                     axisCenteredZero: false
                     axisColorMode: text
                     axisLabel: ""
@@ -613,6 +622,7 @@ spec:
                           value: null
                         - color: red
                           value: 80
+                unit: bytes
             overrides: []
           gridPos:
             h: 7
@@ -654,6 +664,7 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisBorderShow: false
                     axisCenteredZero: false
                     axisColorMode: text
                     axisLabel: ""
@@ -734,6 +745,7 @@ spec:
                 color:
                     mode: palette-classic
                 custom:
+                    axisBorderShow: false
                     axisCenteredZero: false
                     axisColorMode: text
                     axisLabel: ""
@@ -835,8 +847,7 @@ spec:
           title: Disk Space Usage - Raw
           type: timeseries
     refresh: ""
-    schemaVersion: 38
-    style: dark
+    schemaVersion: 39
     tags:
         - node
         - host
