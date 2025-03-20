@@ -8,13 +8,13 @@ spec:
     canEdit: true
     canSave: true
     created: "2022-04-05T15:23:14Z"
-    createdBy: Anonymous
+    createdBy: mas48
     hasAcl: false
     id: 22
     orgId: 1
     title: Managed
     uid: 9lJtCes7z
     updated: "2022-04-05T15:23:14Z"
-    updatedBy: Anonymous
+    updatedBy: mas48
     url: /dashboards/f/9lJtCes7z/managed
     version: 1
