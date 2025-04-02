@@ -184,6 +184,7 @@ spec:
             legend:
                 displayMode: list
                 placement: right
+                showLegend: true
                 values: []
             pieType: donut
             reduceOptions:
@@ -232,6 +233,7 @@ spec:
             legend:
                 displayMode: list
                 placement: right
+                showLegend: true
                 values: []
             pieType: pie
             reduceOptions:
@@ -304,6 +306,7 @@ spec:
                 calcs: []
                 displayMode: list
                 placement: bottom
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -395,6 +398,7 @@ spec:
                 calcs: []
                 displayMode: list
                 placement: bottom
+                showLegend: true
             tooltip:
                 mode: single
                 sort: none
@@ -449,7 +453,7 @@ spec:
                     reducer: sum
           type: timeseries
     refresh: ""
-    schemaVersion: 36
+    schemaVersion: 41
     style: dark
     tags: []
     templating:
