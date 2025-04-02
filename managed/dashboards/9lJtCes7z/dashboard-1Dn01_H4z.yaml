@@ -169,8 +169,7 @@ spec:
               resolution: 1
           title: MITx - 5.111 Only - NGINX Avg Request Duration
           type: timeseries
-    refresh: ""
-    schemaVersion: 41
+    schemaVersion: 37
     style: dark
     tags: []
     templating:
