@@ -1772,7 +1772,7 @@ spec:
           title: Percentage of requests "PUT"  method  was served in 100ms or below
           type: gauge
     refresh: ""
-    schemaVersion: 38
+    schemaVersion: 41
     tags: []
     templating:
         list:
@@ -1884,16 +1884,6 @@ spec:
             - 1h
             - 2h
             - 1d
-        time_options:
-            - 5m
-            - 15m
-            - 1h
-            - 6h
-            - 12h
-            - 24h
-            - 2d
-            - 7d
-            - 30d
     timezone: ""
     title: Keycloak Metrics Dashboard
     uid: keycloak-dashboard
