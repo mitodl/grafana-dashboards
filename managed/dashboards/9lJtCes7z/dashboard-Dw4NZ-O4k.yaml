@@ -467,7 +467,7 @@ spec:
           transformations: []
           type: timeseries
     refresh: 1m
-    schemaVersion: 37
+    schemaVersion: 41
     style: dark
     tags: []
     templating:
