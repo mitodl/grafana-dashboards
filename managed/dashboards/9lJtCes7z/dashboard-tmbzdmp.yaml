@@ -1,0 +1,517 @@
+apiVersion: grizzly.grafana.com/v1alpha1
+kind: Dashboard
+metadata:
+    folder: 9lJtCes7z
+    name: tmbzdmp
+spec:
+    annotations:
+        list:
+            - builtIn: 1
+              datasource:
+                type: grafana
+                uid: -- Grafana --
+              enable: true
+              hide: true
+              iconColor: rgba(0, 211, 255, 1)
+              name: Annotations & Alerts
+              type: dashboard
+    description: Monitor pod counts per deployment with cluster and deployment filters to track autoscaled workloads over time
+    editable: true
+    fiscalYearStartMonth: 0
+    graphTooltip: 0
+    links: []
+    panels:
+        - datasource:
+            type: prometheus
+            uid: grafanacloud-prom
+          description: Shows the current number of available pod replicas grouped by cluster and deployment
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 10
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: smooth
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: auto
+                    showValues: false
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: 0
+                        - color: red
+                          value: 80
+                unit: short
+            overrides: []
+          gridPos:
+            h: 10
+            w: 24
+            x: 0
+            "y": 0
+          id: 2
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - min
+                    - max
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: multi
+                sort: desc
+          pluginVersion: 12.4.0-19378664917
+          targets:
+            - datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              expr: sum by(cluster, deployment) (kube_deployment_status_replicas_available{cluster=~"$cluster", deployment=~"$deployment"})
+              hide: false
+              instant: false
+              legendFormat: '{{cluster}} - {{deployment}}'
+              queryType: range
+              range: true
+              refId: A
+          title: Pod count by cluster and deployment
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: grafanacloud-prom
+          description: Aggregate memory working set bytes across all pods in each deployment, filtered by cluster and deployment
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 10
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: smooth
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    showValues: false
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: 0
+                        - color: red
+                          value: 80
+                unit: bytes
+            overrides: []
+          gridPos:
+            h: 10
+            w: 12
+            x: 0
+            "y": 10
+          id: 6
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - mean
+                    - max
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: multi
+                sort: desc
+          pluginVersion: 12.4.0-19378664917
+          targets:
+            - datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              expr: sum by(workload) (container_memory_working_set_bytes{cluster=~"$cluster", image!=""} * on(namespace, pod) group_left(workload) namespace_workload_pod:kube_pod_owner:relabel{cluster=~"$cluster", workload=~"$deployment", workload_type="deployment"})
+              hide: false
+              instant: false
+              legendFormat: '{{workload}}'
+              queryType: range
+              range: true
+              refId: A
+          title: Memory usage by deployment
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: grafanacloud-prom
+          description: Aggregate CPU usage rate across all pods in each deployment, filtered by cluster and deployment
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 10
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: smooth
+                    lineWidth: 1
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    showValues: false
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: 0
+                        - color: red
+                          value: 80
+                unit: short
+            overrides: []
+          gridPos:
+            h: 10
+            w: 12
+            x: 12
+            "y": 10
+          id: 5
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                    - mean
+                    - max
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: multi
+                sort: desc
+          pluginVersion: 12.4.0-19378664917
+          targets:
+            - datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              expr: sum by(workload) (rate(container_cpu_usage_seconds_total{cluster=~"$cluster", image!=""}[$__rate_interval]) * on(namespace, pod) group_left(workload) namespace_workload_pod:kube_pod_owner:relabel{cluster=~"$cluster", workload=~"$deployment", workload_type="deployment"})
+              hide: false
+              instant: false
+              legendFormat: '{{workload}}'
+              queryType: range
+              range: true
+              refId: A
+          title: CPU usage by deployment
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: grafanacloud-prom
+          description: Shows memory requests and limits for each deployment. Requests are the guaranteed memory resources, limits are the maximum allowed.
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: linear
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    showValues: false
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: 0
+                        - color: red
+                          value: 80
+                unit: bytes
+            overrides:
+                - matcher:
+                    id: byRegexp
+                    options: .*requests.*
+                  properties:
+                    - id: custom.lineStyle
+                      value:
+                        dash:
+                            - 10
+                            - 10
+                        fill: dash
+                - matcher:
+                    id: byRegexp
+                    options: .*limits.*
+                  properties:
+                    - id: custom.lineStyle
+                      value:
+                        fill: solid
+          gridPos:
+            h: 9
+            w: 12
+            x: 0
+            "y": 20
+          id: 8
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: multi
+                sort: desc
+          pluginVersion: 12.4.0-19378664917
+          targets:
+            - datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              expr: sum by(workload) (kube_pod_container_resource_requests{cluster=~"$cluster", resource="memory"} * on(namespace, pod) group_left(workload) namespace_workload_pod:kube_pod_owner:relabel{cluster=~"$cluster", workload=~"$deployment", workload_type="deployment"})
+              hide: false
+              instant: false
+              legendFormat: '{{workload}} - requests'
+              queryType: range
+              range: true
+              refId: A
+            - datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              expr: sum by(workload) (kube_pod_container_resource_limits{cluster=~"$cluster", resource="memory"} * on(namespace, pod) group_left(workload) namespace_workload_pod:kube_pod_owner:relabel{cluster=~"$cluster", workload=~"$deployment", workload_type="deployment"})
+              hide: false
+              instant: false
+              legendFormat: '{{workload}} - limits'
+              queryType: range
+              range: true
+              refId: B
+          title: Memory requests and limits by deployment
+          type: timeseries
+        - datasource:
+            type: prometheus
+            uid: grafanacloud-prom
+          description: Shows CPU requests and limits for each deployment. Requests are the guaranteed CPU resources, limits are the maximum allowed.
+          fieldConfig:
+            defaults:
+                color:
+                    mode: palette-classic
+                custom:
+                    axisBorderShow: false
+                    axisCenteredZero: false
+                    axisColorMode: text
+                    axisLabel: ""
+                    axisPlacement: auto
+                    barAlignment: 0
+                    barWidthFactor: 0.6
+                    drawStyle: line
+                    fillOpacity: 0
+                    gradientMode: none
+                    hideFrom:
+                        legend: false
+                        tooltip: false
+                        viz: false
+                    insertNulls: false
+                    lineInterpolation: linear
+                    lineWidth: 2
+                    pointSize: 5
+                    scaleDistribution:
+                        type: linear
+                    showPoints: never
+                    showValues: false
+                    spanNulls: false
+                    stacking:
+                        group: A
+                        mode: none
+                    thresholdsStyle:
+                        mode: "off"
+                mappings: []
+                thresholds:
+                    mode: absolute
+                    steps:
+                        - color: green
+                          value: 0
+                        - color: red
+                          value: 80
+                unit: short
+            overrides:
+                - matcher:
+                    id: byRegexp
+                    options: .*requests.*
+                  properties:
+                    - id: custom.lineStyle
+                      value:
+                        dash:
+                            - 10
+                            - 10
+                        fill: dash
+                - matcher:
+                    id: byRegexp
+                    options: .*limits.*
+                  properties:
+                    - id: custom.lineStyle
+                      value:
+                        fill: solid
+          gridPos:
+            h: 9
+            w: 12
+            x: 12
+            "y": 20
+          id: 7
+          options:
+            legend:
+                calcs:
+                    - lastNotNull
+                displayMode: table
+                placement: bottom
+                showLegend: true
+            tooltip:
+                hideZeros: false
+                mode: multi
+                sort: desc
+          pluginVersion: 12.4.0-19378664917
+          targets:
+            - datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              expr: sum by(workload) (kube_pod_container_resource_requests{cluster=~"$cluster", resource="cpu"} * on(namespace, pod) group_left(workload) namespace_workload_pod:kube_pod_owner:relabel{cluster=~"$cluster", workload=~"$deployment", workload_type="deployment"})
+              hide: false
+              instant: false
+              legendFormat: '{{workload}} - requests'
+              queryType: range
+              range: true
+              refId: A
+            - datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              expr: sum by(workload) (kube_pod_container_resource_limits{cluster=~"$cluster", resource="cpu"} * on(namespace, pod) group_left(workload) namespace_workload_pod:kube_pod_owner:relabel{cluster=~"$cluster", workload=~"$deployment", workload_type="deployment"})
+              hide: false
+              instant: false
+              legendFormat: '{{workload}} - limits'
+              queryType: range
+              range: true
+              refId: B
+          title: CPU requests and limits by deployment
+          type: timeseries
+    preload: false
+    schemaVersion: 42
+    tags: []
+    templating:
+        list:
+            - current:
+                text:
+                    - applications-production
+                value:
+                    - applications-production
+              datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              includeAll: true
+              label: Cluster
+              multi: true
+              name: cluster
+              options: []
+              query: label_values(kube_deployment_status_replicas_available, cluster)
+              refresh: 1
+              sort: 1
+              type: query
+            - current:
+                text: All
+                value: $__all
+              datasource:
+                type: prometheus
+                uid: grafanacloud-prom
+              includeAll: true
+              label: Deployment
+              multi: true
+              name: deployment
+              options: []
+              query: label_values(kube_deployment_status_replicas_available{cluster=~"$cluster"}, deployment)
+              refresh: 2
+              sort: 1
+              type: query
+    time:
+        from: now-6h
+        to: now
+    timepicker: {}
+    timezone: browser
+    title: Pod count by deployment
+    uid: tmbzdmp
